@@ -1,21 +1,5 @@
 #include "osc.h"
 
-int32_t wsize = 256;
-
-struct 
-osc_settings_t {
-  double frequency;
-  double phase;
-  double amp;
-};
-
-struct 
-osc_t {
-  struct osc_settings_t base;
-  struct osc_settings_t current;
-  int running;
-};
-
 void 
 osc_init_osc ( struct osc_t *osc, double frequency, double phase, double amp )
 {
@@ -33,14 +17,20 @@ osc_trigger ( struct osc_t *osc )
   osc->running = 1;
 }
 
-void 
-osc_update_phase ( struct osc_t *osc )
+double
+osc_phase_increment_of_next_sample ( struct osc_t *osc )
 {
-  osc->current.phase += wsize / (samplerate / osc->current.frequency);
+  osc->current.phase += (samplerate / osc->current.frequency);
+  return osc->current.phase;
+}
+
+void
+osc_update_phase ( struct osc_t * osc, double phase_increment )
+{
+  osc->current.phase += phase_increment;
 
   if (osc->current.phase >= 1)
   {
     osc->current.phase = 0;
-  }
+  } 
 }
-
