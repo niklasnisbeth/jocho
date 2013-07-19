@@ -1,11 +1,11 @@
 #include "synth.h"
 #include "stdio.h"
 
-int32_t samplerate = 44100;
+float samplerate = 44100.0;
 
 struct algorithm_t alg1 = {
   {
-    {OFF,ON,OFF},
+    {OFF,OFF,OFF},
     {OFF,OFF,ON}
   }
 };
@@ -14,27 +14,18 @@ struct algorithm_t alg1 = {
 void
 synth_update_oscs ( struct synth_t *synth )
 {
-  int i, j;
+  synth->output_buffer = 0;
+
+  int i = 0; 
   for (i = 0; i < NUM_OSCS; i++)
   {
     osc_update_phase(synth->oscs[i], osc_phase_increment_of_next_sample(synth->oscs[i]));
-    for (j = 0; j < NUM_OSCS; j++)
-    {
-      if (synth->algorithm->outputs[i][j] == ON)
-      {
-        osc_update_phase(synth->oscs[j], synth_wt_lookup(synth->oscs[i]->current.phase));
-      }
-    }
-    if (synth->algorithm->outputs[i][j] == ON)
-    {
-      synth->output_buffer += synth->oscs[i]->current.amp * synth_wt_lookup(synth->oscs[i]->current.phase);
-    }
+    synth->output_buffer += synth->oscs[i]->current.amp * synth_wt_lookup(synth->oscs[i]);
   }
 }
 
-double
-synth_wt_lookup ( double phase )
+float
+synth_wt_lookup ( struct osc_t *osc )
 {
-  printf("%f\t", phase);
-  return sin(phase * 2.0 * 3.14159);
+  return sinf(2.0 * 3.14159 * osc->current.phase);
 }

@@ -10,7 +10,7 @@
 
 #define NUM_OSCS 2
 
-extern int32_t samplerate;
+extern float samplerate;
 extern struct algorithm_t alg1;
 
 enum osc_output_mode { OFF, ON }; 
@@ -22,10 +22,10 @@ struct algorithm_t {
 struct synth_t { 
   struct osc_t *oscs[NUM_OSCS]; 
   struct algorithm_t *algorithm; 
-  double output_buffer;
+  float output_buffer;
 }; 
 
 void synth_update_oscs ( struct synth_t *synth );
-double synth_wt_lookup ( double phase );
+float synth_wt_lookup ( struct osc_t *osc );
 
 #endif

@@ -1,12 +1,12 @@
-#include "synth.h"
-
 #ifndef OSC_H
 #define OSC_H
 
+#include "synth.h"
+
 struct osc_settings_t {
-  double frequency;
-  double phase;
-  double amp;
+  float frequency;
+  float phase;
+  float amp;
 };
 
 struct osc_t {
@@ -16,9 +16,9 @@ struct osc_t {
 };
 
 
-void osc_init_osc ( struct osc_t *osc, double frequency, double phase, double amp );
+void osc_init_osc ( struct osc_t *osc, float frequency, float phase, float amp );
 void osc_trigger ( struct osc_t *osc );
-double osc_phase_increment_of_next_sample ( struct osc_t *osc );
-void osc_update_phase ( struct osc_t *osc, double phase_increment );
+float osc_phase_increment_of_next_sample ( struct osc_t *osc );
+void osc_update_phase ( struct osc_t *osc, float phase_increment );
 
 #endif

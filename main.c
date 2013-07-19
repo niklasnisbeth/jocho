@@ -5,7 +5,7 @@
 #include "osc.h"
 #include "env.h"
 
-typedef double buffer_t[256];
+typedef int16_t buffer_t[256];
 
 void
 fill_buffer (buffer_t buffer, struct synth_t *synth)
@@ -13,14 +13,15 @@ fill_buffer (buffer_t buffer, struct synth_t *synth)
   for (int pos = 0; pos <= 255; pos++)
   {
     synth_update_oscs(synth);
-    buffer[pos] = synth->output_buffer;
+    printf("%f\n",synth->output_buffer);
+    buffer[pos] = 32768 - synth->output_buffer*32768;
   }
 }
 
 size_t
 out (buffer_t buffer, FILE *fd)
 {
-  size_t size = fwrite(buffer, sizeof(double), 128, fd);
+  size_t size = fwrite(buffer, sizeof(int16_t), 256, fd);
   
   return size;
 }
@@ -37,15 +38,15 @@ main(void)
   buffer_t *buffer = malloc(sizeof(buffer_t));
   FILE *fd = fopen("/tmp/tst.raw", "w");
 
-  int j = 0, dur = 20;
+  int j = 0, dur = 200;
 
   synth.oscs[0] = &osc1;
   synth.oscs[1] = &osc2;
   synth.algorithm = &alg1;
   synth.output_buffer = 0.0; 
 
-  osc_init_osc(synth.oscs[0], 220, 0.0, 0.8);
-  osc_init_osc(synth.oscs[1], 440, 0.0, 0.5);
+  osc_init_osc(synth.oscs[0], 443, 0.0, 0.4);
+  osc_init_osc(synth.oscs[1], 438, 0.0, 0.4);
 
   osc_trigger(synth.oscs[0]);
   osc_trigger(synth.oscs[1]);

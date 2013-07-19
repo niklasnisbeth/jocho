@@ -1,7 +1,8 @@
 #include "osc.h"
+#include <stdio.h>
 
 void 
-osc_init_osc ( struct osc_t *osc, double frequency, double phase, double amp )
+osc_init_osc ( struct osc_t *osc, float frequency, float phase, float amp )
 {
   osc->base.frequency = frequency;
   osc->base.amp = amp;
@@ -17,15 +18,14 @@ osc_trigger ( struct osc_t *osc )
   osc->running = 1;
 }
 
-double
+float
 osc_phase_increment_of_next_sample ( struct osc_t *osc )
 {
-  osc->current.phase += (samplerate / osc->current.frequency);
-  return osc->current.phase;
+  return 1/(samplerate/osc->current.frequency);
 }
 
 void
-osc_update_phase ( struct osc_t * osc, double phase_increment )
+osc_update_phase ( struct osc_t *osc, float phase_increment )
 {
   osc->current.phase += phase_increment;
 
