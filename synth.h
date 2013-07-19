@@ -6,26 +6,26 @@
 #define SYNTH_H
 
 #include "env.h"
-#include "osc.h"
+#include "op.h"
 
-#define NUM_OSCS 2
+#define NUM_OPS 2
 
 extern float samplerate;
 extern struct algorithm_t alg1;
 
-enum osc_output_mode { OFF, ON }; 
+enum op_output_mode { OFF, ON }; 
  
 struct algorithm_t { 
-  enum osc_output_mode outputs[NUM_OSCS][NUM_OSCS + 1]; 
+  enum op_output_mode outputs[NUM_OPS][NUM_OPS + 1]; 
 }; 
 
 struct synth_t { 
-  struct osc_t *oscs[NUM_OSCS]; 
+  struct op_t *ops[NUM_OPS]; 
   struct algorithm_t *algorithm; 
   float output_buffer;
 }; 
 
-void synth_update_oscs ( struct synth_t *synth );
-float synth_wt_lookup ( struct osc_t *osc );
+void synth_update_ops ( struct synth_t *synth );
+float synth_wt_lookup ( struct op_t *op );
 
 #endif
