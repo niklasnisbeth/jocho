@@ -1,8 +1,8 @@
+#include "env.h"
+#include "defs.h"
+
 #ifndef OP_H
 #define OP_H
-
-#include "synth.h"
-#include "env.h"
 
 struct op_settings_t {
   float frequency;
@@ -19,7 +19,7 @@ struct op_t {
 };
 
 
-void op_init_op ( struct op_t *op, float frequency, float phase, float amp );
+void op_init ( struct op_t *op, float frequency, float phase, float amp );
 void op_trigger ( struct op_t *op );
 float op_phase_increment ( struct op_t *op );
 void op_update_phase ( struct op_t *op, float phase_increment );

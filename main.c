@@ -1,21 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "synth.h"
+#include "voice.h"
 #include "op.h"
 #include "env.h"
 
 typedef int16_t buffer_t[256];
 
+#define SAMPLERATE 44100.f
+
 void
-fill_buffer ( buffer_t buffer, struct synth_t *synth )
+fill_buffer ( buffer_t buffer, struct voice_t *voice )
 {
   int pos;
   for (pos = 0; pos <= 255; pos++)
   {
-    synth_update_ops(synth);
-    synth_update_envs(synth);
-    buffer[pos] = 32768 - synth->output_buffer*32768;
+    voice_update_ops(voice);
+    voice_update_envs(voice);
+    buffer[pos] = 32768 - voice->output_buffer*32768;
   }
 }
 
@@ -30,46 +32,20 @@ out ( buffer_t buffer, FILE *fd )
 int 
 main( void )
 {
-  struct synth_t synth;
-
-  struct op_t op1;
-  struct op_t op2;
-
-  struct env_t op1_aenv;
-  struct env_t op1_penv;
-  struct env_t op2_aenv;
-  struct env_t op2_penv;
-
   buffer_t *buffer = malloc(sizeof(buffer_t));
   FILE *fd = fopen("/tmp/tst.raw", "w"); 
 
-  int j = 0, dur = 200;
+  struct voice_t voice;
 
-  synth.ops[0] = &op1;
-  synth.ops[0]->aenv = &op1_aenv;
-  synth.ops[0]->penv = &op1_penv;
-  synth.ops[1] = &op2;
-  synth.ops[1]->aenv = &op2_aenv;
-  synth.ops[1]->penv = &op2_penv;
-  synth.algorithm = &alg1;
-  synth.output_buffer = 0.0f; 
+  voice_init(&voice);
+  voice_trigger(&voice);
 
-  op_init_op(synth.ops[0], 440, 0.0f, 0.8f);
-  env_init(synth.ops[0]->penv, 1.0, 1, 200, 0.5);
-  env_init(synth.ops[0]->aenv, 1.0, 200, 999, 0.0);
-
-  op_init_op(synth.ops[1], 440, 0.0f, 0.4f);
-  env_init(synth.ops[1]->penv, 1.0, 1, 900, 2.1);
-  env_init(synth.ops[1]->aenv, 1.0, 1, 500, 1.0);
-
-  op_trigger(synth.ops[0]);
-  op_trigger(synth.ops[1]);
-
-  while(j < dur)
+  while(1)
   {
-    fill_buffer(*buffer, &synth);
+    fill_buffer(*buffer, &voice);
     out(*buffer, fd); 
-    j++;
+    if (voice.ops[0]->aenv->state == ENV_SUSTAIN)
+      break;
   }
 
   return 0;

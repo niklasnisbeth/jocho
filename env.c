@@ -1,4 +1,4 @@
-#include "stdio.h"
+#include "stdlib.h"
 #include "env.h"
 
 void
@@ -36,12 +36,12 @@ env_update ( struct env_t *env )
       }
       else
       {
-        env->held += 1 / (samplerate / 1000);
+        env->held += 1 / (SAMPLERATE / 1000);
       }
       break;
 
     case ENV_DECAY:
-      delta = (env->peak - env->target) / (env->decay * (samplerate / 1000));
+      delta = (env->peak - env->target) / ((env->decay + 0.01f) *  (SAMPLERATE / 1000));
       env->cur -= delta;
       if (env->cur <= 0)
       {

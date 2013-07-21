@@ -3,7 +3,7 @@
 
 COMPILER = gcc
 CCFLAGS = -W -Wall -Werror -pedantic-errors #-std=c99 
-OBJECTS = main.o op.o env.o synth.o 
+OBJECTS = main.o op.o env.o voice.o 
 LIBS = -lm
 synth1: ${OBJECTS}
 	${COMPILER} ${CCFLAGS} ${OBJECTS} ${LIBS} -o jocho

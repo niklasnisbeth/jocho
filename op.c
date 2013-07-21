@@ -1,9 +1,12 @@
+#include <stdlib.h>
 #include "op.h"
-#include <stdio.h>
 
 void 
-op_init_op ( struct op_t *op, float frequency, float phase, float amp )
+op_init ( struct op_t *op, float frequency, float phase, float amp )
 {
+  op->aenv = malloc(sizeof(struct env_t));
+  op->penv = malloc(sizeof(struct env_t));
+
   op->base.frequency = frequency;
   op->base.amp = amp;
   op->base.phase = phase;
@@ -25,7 +28,7 @@ op_trigger ( struct op_t *op )
 float
 op_phase_increment ( struct op_t *op )
 {
-  return 1/(samplerate/(op->current.frequency*op->penv->cur));
+  return 1/(SAMPLERATE/(op->current.frequency*op->penv->cur));
 }
 
 void

@@ -1,7 +1,7 @@
 #ifndef ENV_H
 #define ENV_H
 
-#include "synth.h"
+#include "defs.h"
 
 enum env_state_t {
   ENV_STOPPED,
