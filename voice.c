@@ -1,5 +1,4 @@
 #include "voice.h"
-#include "stdio.h"
 
 void
 voice_init ( struct voice_t *voice )
@@ -25,15 +24,20 @@ voice_trigger (struct voice_t *voice )
 
 
 void
-voice_update_ops ( struct voice_t *voice )
+voice_next_sample ( struct voice_t *voice )
 {
+
   voice->output_buffer = 0;
 
-  op_update_phase(&voice->ops[1], op_phase_increment(&voice->ops[1]));
-  op_update_phase(&voice->ops[0], op_phase_increment(&voice->ops[0]));
-  voice->output_buffer += (voice->ops[0].current.amp * voice->ops[0].aenv.cur) *
-    voice_wt_lookup(voice->ops[0].current.phase + 
-        ((voice->ops[1].current.amp * voice->ops[1].aenv.cur) * voice_wt_lookup(voice->ops[1].current.phase)));
+  for (int i=0; i<NUM_OPS; i++)
+  {
+    op_update_phase(&voice->ops[i]);
+  }
+
+  /* ALGO_1 */
+  float offset;
+  offset = op_cur_amp(&voice->ops[1])*op_wave(&voice->ops[1]);
+  voice->output_buffer += op_cur_amp(&voice->ops[0]) * op_wave_with_offset(&voice->ops[0], offset);
 }
 
 void
@@ -45,11 +49,4 @@ voice_update_envs ( struct voice_t *voice )
     env_update(&voice->ops[i].aenv);
     env_update(&voice->ops[i].penv);
   }
-}
-
-
-float
-voice_wt_lookup ( float phase )
-{
-  return sinf(2.0 * 3.14159 * phase);
 }

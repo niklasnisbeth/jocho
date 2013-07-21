@@ -15,8 +15,8 @@ fill_buffer ( buffer_t buffer, struct voice_t *voice )
   int pos;
   for (pos = 0; pos <= 255; pos++)
   {
-    voice_update_ops(voice);
     voice_update_envs(voice);
+    voice_next_sample(voice);
     buffer[pos] = 32768 - voice->output_buffer*32768;
   }
 }

@@ -21,7 +21,9 @@ struct op_t {
 
 void op_init ( struct op_t *op, float frequency, float phase, float amp );
 void op_trigger ( struct op_t *op );
-float op_phase_increment ( struct op_t *op );
-void op_update_phase ( struct op_t *op, float phase_increment );
+float op_update_phase ( struct op_t *op );
+float op_cur_amp ( struct op_t *op );
+float op_wave ( struct op_t *op );
+float op_wave_with_offset ( struct op_t *op, float offset );
 
 #endif

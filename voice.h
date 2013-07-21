@@ -17,8 +17,7 @@ struct voice_t {
 
 void voice_init ( struct voice_t *voice );
 void voice_trigger ( struct voice_t *voice );
-void voice_update_ops ( struct voice_t *voice );
+void voice_next_sample ( struct voice_t *voice );
 void voice_update_envs ( struct voice_t *voice );
-float voice_wt_lookup ( float phase );
 
 #endif
