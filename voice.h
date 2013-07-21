@@ -11,7 +11,7 @@
 #define NUM_OPS 2
 
 struct voice_t { 
-  struct op_t *ops[NUM_OPS]; 
+  struct op_t ops[NUM_OPS]; 
   float output_buffer;
 }; 
 

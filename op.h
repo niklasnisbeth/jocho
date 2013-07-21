@@ -13,8 +13,8 @@ struct op_settings_t {
 struct op_t {
   struct op_settings_t base;
   struct op_settings_t current;
-  struct env_t *aenv;
-  struct env_t *penv;
+  struct env_t aenv;
+  struct env_t penv;
   int running;
 };
 

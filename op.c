@@ -4,9 +4,6 @@
 void 
 op_init ( struct op_t *op, float frequency, float phase, float amp )
 {
-  op->aenv = malloc(sizeof(struct env_t));
-  op->penv = malloc(sizeof(struct env_t));
-
   op->base.frequency = frequency;
   op->base.amp = amp;
   op->base.phase = phase;
@@ -19,8 +16,8 @@ op_trigger ( struct op_t *op )
   op->current.amp = op->base.amp;
   op->current.phase = op->base.phase;
 
-  env_trigger(op->aenv);
-  env_trigger(op->penv);
+  env_trigger(&op->aenv);
+  env_trigger(&op->penv);
 
   op->running = 1;
 }
@@ -28,7 +25,7 @@ op_trigger ( struct op_t *op )
 float
 op_phase_increment ( struct op_t *op )
 {
-  return 1/(SAMPLERATE/(op->current.frequency*op->penv->cur));
+  return 1/(SAMPLERATE/(op->current.frequency*op->penv.cur));
 }
 
 void
