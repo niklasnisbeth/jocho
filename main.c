@@ -33,7 +33,7 @@ int
 main( void )
 {
   buffer_t *buffer = malloc(sizeof(buffer_t));
-  FILE *fd = fopen("/tmp/tst.raw", "w"); 
+  FILE *fd = fopen("tst.raw", "w"); 
 
   struct voice_t voice;
 
