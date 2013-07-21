@@ -26,6 +26,7 @@ struct synth_t {
 }; 
 
 void synth_update_ops ( struct synth_t *synth );
-float synth_wt_lookup ( struct op_t *op );
+void synth_update_envs ( struct synth_t *synth );
+float synth_wt_lookup ( float phase );
 
 #endif

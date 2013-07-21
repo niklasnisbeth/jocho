@@ -10,9 +10,11 @@ typedef int16_t buffer_t[256];
 void
 fill_buffer ( buffer_t buffer, struct synth_t *synth )
 {
-  for (int pos = 0; pos <= 255; pos++)
+  int pos;
+  for (pos = 0; pos <= 255; pos++)
   {
     synth_update_ops(synth);
+    synth_update_envs(synth);
     buffer[pos] = 32768 - synth->output_buffer*32768;
   }
 }
@@ -25,13 +27,6 @@ out ( buffer_t buffer, FILE *fd )
   return size;
 }
 
-void
-update_controls ( struct synth_t *synth )
-{
-  synth->ops[0]->current.amp = synth->ops[0]->current.amp;
-}
-
-
 int 
 main( void )
 {
@@ -40,18 +35,32 @@ main( void )
   struct op_t op1;
   struct op_t op2;
 
+  struct env_t op1_aenv;
+  struct env_t op1_penv;
+  struct env_t op2_aenv;
+  struct env_t op2_penv;
+
   buffer_t *buffer = malloc(sizeof(buffer_t));
-  FILE *fd = fopen("/tmp/tst.raw", "w");
+  FILE *fd = fopen("/tmp/tst.raw", "w"); 
 
   int j = 0, dur = 200;
 
   synth.ops[0] = &op1;
+  synth.ops[0]->aenv = &op1_aenv;
+  synth.ops[0]->penv = &op1_penv;
   synth.ops[1] = &op2;
+  synth.ops[1]->aenv = &op2_aenv;
+  synth.ops[1]->penv = &op2_penv;
   synth.algorithm = &alg1;
-  synth.output_buffer = 0.0; 
+  synth.output_buffer = 0.0f; 
 
-  op_init_op(synth.ops[0], 443, 0.0, 0.4);
-  op_init_op(synth.ops[1], 222, 0.0, 0.4);
+  op_init_op(synth.ops[0], 440, 0.0f, 0.6f);
+  env_init(synth.ops[0]->penv, 1.0, 200, 0.5);
+  env_init(synth.ops[0]->aenv, 1.0, 999, 0.0);
+
+  op_init_op(synth.ops[1], 440, 0.0f, 0.4f);
+  env_init(synth.ops[1]->penv, 1.0, 900, 2.1);
+  env_init(synth.ops[1]->aenv, 1.0, 500, 1.0);
 
   op_trigger(synth.ops[0]);
   op_trigger(synth.ops[1]);
@@ -59,7 +68,7 @@ main( void )
   while(j < dur)
   {
     fill_buffer(*buffer, &synth);
-    out(*buffer, fd);
+    out(*buffer, fd); 
     j++;
   }
 

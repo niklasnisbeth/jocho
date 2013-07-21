@@ -15,13 +15,17 @@ op_trigger ( struct op_t *op )
   op->current.frequency = op->base.frequency;
   op->current.amp = op->base.amp;
   op->current.phase = op->base.phase;
+
+  env_trigger(op->aenv);
+  env_trigger(op->penv);
+
   op->running = 1;
 }
 
 float
-op_phase_increment_of_next_sample ( struct op_t *op )
+op_phase_increment ( struct op_t *op )
 {
-  return 1/(samplerate/op->current.frequency);
+  return 1/(samplerate/(op->current.frequency*op->penv->cur));
 }
 
 void
