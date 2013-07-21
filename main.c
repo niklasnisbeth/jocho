@@ -54,13 +54,13 @@ main( void )
   synth.algorithm = &alg1;
   synth.output_buffer = 0.0f; 
 
-  op_init_op(synth.ops[0], 440, 0.0f, 0.6f);
-  env_init(synth.ops[0]->penv, 1.0, 200, 0.5);
-  env_init(synth.ops[0]->aenv, 1.0, 999, 0.0);
+  op_init_op(synth.ops[0], 440, 0.0f, 0.8f);
+  env_init(synth.ops[0]->penv, 1.0, 1, 200, 0.5);
+  env_init(synth.ops[0]->aenv, 1.0, 200, 999, 0.0);
 
   op_init_op(synth.ops[1], 440, 0.0f, 0.4f);
-  env_init(synth.ops[1]->penv, 1.0, 900, 2.1);
-  env_init(synth.ops[1]->aenv, 1.0, 500, 1.0);
+  env_init(synth.ops[1]->penv, 1.0, 1, 900, 2.1);
+  env_init(synth.ops[1]->aenv, 1.0, 1, 500, 1.0);
 
   op_trigger(synth.ops[0]);
   op_trigger(synth.ops[1]);

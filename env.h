@@ -3,15 +3,24 @@
 
 #include "synth.h"
 
+enum env_state_t {
+  ENV_STOPPED,
+  ENV_HOLD,
+  ENV_DECAY,
+  ENV_SUSTAIN
+};
+
 struct env_t {
-  int running;
+  enum env_state_t state;
   float peak; /* peak value multiple */
+  float hold; /* hold time (ms) */
+  float held;
   float decay; /* decay time (ms) */
   float target; /* target value multiple */
   float cur; /* current value */
 };
 
-void env_init ( struct env_t *env, float peak, float decay, float targ );
+void env_init ( struct env_t *env, float peak, float hold, float decay, float targ );
 
 void env_trigger ( struct env_t *env );
 
