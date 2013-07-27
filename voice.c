@@ -3,6 +3,7 @@
 void
 voice_init ( struct voice_t *voice )
 {
+  voice->algorithm = 1;
   int i;
   for (i = 0; i<NUM_OPS; i++)
   {
@@ -26,7 +27,6 @@ voice_trigger (struct voice_t *voice )
 void
 voice_next_sample ( struct voice_t *voice )
 {
-
   voice->output_buffer = 0;
 
   for (int i=0; i<NUM_OPS; i++)

@@ -12,6 +12,7 @@
 
 struct voice_t { 
   struct op_t ops[NUM_OPS]; 
+  int algorithm;
   float output_buffer;
 }; 
 
