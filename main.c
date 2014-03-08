@@ -10,14 +10,25 @@ typedef int16_t buffer_t[256];
 #define SAMPLERATE 44100.f
 
 void
+assert(int res)
+{
+  if (!res)
+  {
+    printf("assertion failed\n");
+  }
+}
+
+void
 fill_buffer ( buffer_t buffer, struct voice_t *voice )
 {
   int pos;
+  float sample;
   for (pos = 0; pos <= 255; pos++)
   {
     voice_update_envs(voice);
-    voice_next_sample(voice);
-    buffer[pos] = 32768 - voice->output_buffer*32768;
+    sample = voice_next_sample(voice);
+    assert(sample >= -1.0f && sample <= 1.0f);
+    buffer[pos] = (int16_t)(sample*32767.f);
   }
 }
 
@@ -47,6 +58,7 @@ main( void )
     if (voice.ops[0].aenv.state == ENV_SUSTAIN)
       break;
   }
+
 
   return 0;
 }

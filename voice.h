@@ -8,7 +8,7 @@
 #include "env.h"
 #include "op.h"
 
-#define NUM_OPS 2
+#define NUM_OPS 4
 
 struct voice_t { 
   struct op_t ops[NUM_OPS]; 
@@ -18,7 +18,7 @@ struct voice_t {
 
 void voice_init ( struct voice_t *voice );
 void voice_trigger ( struct voice_t *voice );
-void voice_next_sample ( struct voice_t *voice );
+float voice_next_sample ( struct voice_t *voice );
 void voice_update_envs ( struct voice_t *voice );
 
 #endif

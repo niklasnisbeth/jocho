@@ -30,12 +30,10 @@ env_update ( struct env_t *env )
   switch (env->state)
   {
     case ENV_HOLD:
-      if (env->held >= env->hold)
-      {
+      if (env->held >= env->hold) {
         env->state = ENV_DECAY;
       }
-      else
-      {
+      else {
         env->held += 1 / (SAMPLERATE / 1000);
       }
       break;
@@ -43,12 +41,10 @@ env_update ( struct env_t *env )
     case ENV_DECAY:
       delta = (env->peak - env->target) / ((env->decay + 0.01f) *  (SAMPLERATE / 1000));
       env->cur -= delta;
-      if (env->cur <= 0)
-      {
+      if (env->cur <= 0) {
         env->state = ENV_STOPPED;
       }
-      if ((env->peak > env->target && env->cur < env->target) || (env->peak < env->target && env->cur > env->target))
-      {
+      if ((env->peak > env->target && env->cur < env->target) || (env->peak < env->target && env->cur > env->target)) {
         env->state = ENV_SUSTAIN;
       }
       break;

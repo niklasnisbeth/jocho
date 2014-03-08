@@ -2,7 +2,7 @@
 # Niklas Nisbeth, 2012-3
 
 COMPILER = gcc
-CCFLAGS = -W -Wall -Werror -pedantic-errors -std=c99 
+CCFLAGS = -W -Wall -Werror -pedantic-errors -std=c99 -ggdb
 OBJECTS = main.o op.o env.o voice.o algorithms.o
 LIBS = -lm
 synth1: ${OBJECTS}
