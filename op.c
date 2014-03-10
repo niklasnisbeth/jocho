@@ -5,9 +5,9 @@
 void 
 op_init ( struct op_t *op, float frequency, float phase, float amp )
 {
-  op->base.frequency = frequency;
-  op->base.amp = amp;
-  op->base.phase = phase;
+  op_set_frequency(op, frequency);
+  op_set_amp(op, amp);
+  op_set_phase(op, phase);
 }
 
 void
@@ -54,3 +54,24 @@ op_wave_with_offset ( struct op_t *op, float offset )
   return sinf(2.0 * 3.14159 * (op->current.phase + offset));
 }
 
+void 
+op_set_frequency ( struct op_t *op, float frequency )
+{
+  op->base.frequency = frequency;
+}
+
+void 
+op_set_phase ( struct op_t *op, float phase )
+{
+  if(phase <= 1.0 && phase >= 0) {
+    op->base.phase = phase;
+  }
+}
+
+void 
+op_set_amp ( struct op_t *op, float amp )
+{
+  if(amp <= 1.0 && amp >= 0) {
+    op->base.amp = amp;
+  }
+}

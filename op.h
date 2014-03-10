@@ -4,6 +4,13 @@
 #ifndef OP_H
 #define OP_H
 
+enum op_settable_param_t {
+  FREQUENCY,
+  PHASE,
+  AMP
+};
+
+
 struct op_settings_t {
   float frequency;
   float phase;
@@ -18,6 +25,9 @@ struct op_t {
   int running;
 };
 
+void op_set_frequency ( struct op_t *op, float frequency );
+void op_set_phase ( struct op_t *op, float phase );
+void op_set_amp ( struct op_t *op, float amp ); 
 
 void op_init ( struct op_t *op, float frequency, float phase, float amp );
 void op_trigger ( struct op_t *op );

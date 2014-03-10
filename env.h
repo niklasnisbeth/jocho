@@ -3,6 +3,15 @@
 
 #include "defs.h"
 
+enum env_settable_param_t {
+  PEAK_VAL,
+  HOLD_TIME,
+  DECAY_TIME,
+  TARGET_VAL,
+  SLOPE_COEF,
+  ENV_NUM_SETTABLE_PARAMS
+};
+
 enum env_state_t {
   ENV_STOPPED,
   ENV_HOLD,
@@ -28,5 +37,14 @@ void env_trigger ( struct env_t *env );
 void env_finish ( struct env_t *env );
 
 float env_update ( struct env_t *env );
+
+void env_set_peak ( struct env_t *env, float peak );
+void env_set_hold ( struct env_t *env, float hold );
+void env_set_held ( struct env_t *env, float held );
+void env_set_decay ( struct env_t *env, float decay ); 
+void env_set_target ( struct env_t *env, float target );
+void env_set_cur  ( struct env_t *env, float cur );
+void env_set_slope ( struct env_t *env, float slope );
+
 
 #endif
