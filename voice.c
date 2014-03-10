@@ -9,15 +9,16 @@ voice_init ( struct voice_t *voice )
   for (i = 0; i<NUM_OPS-1; i++)
   {
     op_init(&voice->ops[i], 110, 0.05f, 0.0f);
-    env_init(&voice->ops[i].aenv, 1.0, 20, 1500, 0.0);
-    env_init(&voice->ops[i].penv, 1.0, 0, 0, 1.0);
+    env_init(&voice->ops[i].aenv, 1.0, 20, 1500, 0.0, 0.9f);
+    env_init(&voice->ops[i].penv, 1.0, 0, 0, 1.0, -0.9f);
   }
+
   op_init(&voice->ops[2], 220, 0.0f, 0.2f);
-  env_init(&voice->ops[2].aenv, 1.0, 10, 100, 0.0);
-  env_init(&voice->ops[2].penv, 1.0, 50, 100, 0.4);
+  env_init(&voice->ops[2].aenv, 1.0, 10, 100, 0.0, -0.9f);
+  env_init(&voice->ops[2].penv, 1.0, 50, 100, 0.4, -0.9f);
   op_init(&voice->ops[3], 80, 0.1f, 1.0f);
-  env_init(&voice->ops[3].aenv, 1.0, 40, 750, 0.0);
-  env_init(&voice->ops[3].penv, 2.0, 10, 300, 1.0);
+  env_init(&voice->ops[3].aenv, 1.0, 40, 750, 0.0, -0.9f);
+  env_init(&voice->ops[3].penv, 2.0, 10, 300, 1.0, -0.9f);
 }
 
 void

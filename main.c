@@ -4,10 +4,9 @@
 #include "voice.h"
 #include "op.h"
 #include "env.h"
+#include "defs.h"
 
 typedef int16_t buffer_t[256];
-
-#define SAMPLERATE 44100.f
 
 void
 assert(int res)
@@ -27,7 +26,9 @@ fill_buffer ( buffer_t buffer, struct voice_t *voice )
   {
     voice_update_envs(voice);
     sample = voice_next_sample(voice);
+#ifdef DEBUG
     assert(sample >= -1.0f && sample <= 1.0f);
+#endif
     buffer[pos] = (int16_t)(sample*32767.f);
   }
 }

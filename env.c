@@ -1,14 +1,16 @@
 #include "stdlib.h"
 #include "env.h"
+#include "math.h"
 
 void
-env_init ( struct env_t * env, float peak, float hold, float decay, float target )
+env_init ( struct env_t * env, float peak, float hold, float decay, float target, float slope )
 {
   env->peak = peak;
   env->hold = hold;
   env->held = 0;
   env->decay = decay;
   env->target = target;
+  env->slope = slope;
 
   env->cur = 0;
   env->state = ENV_STOPPED;
@@ -20,6 +22,12 @@ env_trigger ( struct env_t *env )
   env->cur = env->peak;
   env->state = ENV_HOLD;
   env->held = 0;
+}
+
+static float
+nonlinearize ( float val, float slope )
+{
+  return ((1+slope)*val)/(1+(slope*fabsf(val)));
 }
 
 float
@@ -39,7 +47,7 @@ env_update ( struct env_t *env )
       break;
 
     case ENV_DECAY:
-      delta = (env->peak - env->target) / ((env->decay + 0.01f) *  (SAMPLERATE / 1000));
+      delta = nonlinearize((env->peak - env->target) / ((env->decay + 0.01f) *  (SAMPLERATE / 1000)), env->slope);
       env->cur -= delta;
       if (env->cur <= 0) {
         env->state = ENV_STOPPED;

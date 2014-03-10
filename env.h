@@ -18,9 +18,10 @@ struct env_t {
   float decay; /* decay time (ms) */
   float target; /* target value multiple */
   float cur; /* current value */
+  float slope; /* slope time */
 };
 
-void env_init ( struct env_t *env, float peak, float hold, float decay, float targ );
+void env_init ( struct env_t *env, float peak, float hold, float decay, float targ, float slope );
 
 void env_trigger ( struct env_t *env );
 
