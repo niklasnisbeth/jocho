@@ -56,7 +56,7 @@ main( void )
   {
     fill_buffer(*buffer, &voice);
     out(*buffer, fd); 
-    if (voice.ops[0].aenv.state == ENV_SUSTAIN)
+    if (voice.ops[3].aenv.state == ENV_SUSTAIN)
       break;
   }
 

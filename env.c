@@ -11,7 +11,7 @@ env_init ( struct env_t * env, float peak, float hold, float decay, float target
   env_set_target(env, target);
   env_set_slope(env, slope);
 
-  env->held = 0;
+  env->run = 0;
   env->cur = 0;
   env->state = ENV_STOPPED;
 }
@@ -21,35 +21,36 @@ env_trigger ( struct env_t *env )
 {
   env->cur = env->peak;
   env->state = ENV_HOLD;
-  env->held = 0;
+  env->run = 0;
 }
 
 static float
-nonlinearize ( float val, float slope )
+nonlinearize ( float val, float start, float end, float slope )
 {
-  return ((1+slope)*val)/(1+(slope*fabsf(val)));
+  float fx = (val*(1+slope))/(1+(slope*val));
+  float sx = start+((end-start)*fx);
+  return sx;
 }
 
 float
 env_update ( struct env_t *env )
 {
-  float delta = 0;
-
   switch (env->state)
   {
     case ENV_HOLD:
-      if (env->held >= env->hold) {
+      if (env->run >= env->hold) {
         env->state = ENV_DECAY;
+        env->run = 0;
       }
       else {
-        env->held += 1 / (SAMPLERATE / 1000);
+        env->run += 1 / (SAMPLERATE / 1000);
       }
       break;
 
     case ENV_DECAY:
-      delta = nonlinearize((env->peak - env->target) / ((env->decay + 0.01f) *  (SAMPLERATE / 1000)), env->slope);
-      env->cur -= delta;
-      if (env->cur <= 0) {
+      env->run += 1/(SAMPLERATE/1000);
+      env->cur = nonlinearize(env->run/env->decay, env->peak, env->target, env->slope);
+      if ((env->run/env->decay)>=1.f) {
         env->state = ENV_STOPPED;
       }
       if ((env->peak > env->target && env->cur < env->target) || (env->peak < env->target && env->cur > env->target)) {
@@ -84,7 +85,9 @@ env_set_hold ( struct env_t *env, float hold )
 void 
 env_set_decay ( struct env_t *env, float decay ) 
 {
-  env->decay = decay;
+  if(decay>0) {
+    env->decay = decay;
+  }
 }
 
 void 
@@ -98,7 +101,7 @@ env_set_target ( struct env_t *env, float target )
 void 
 env_set_slope ( struct env_t *env, float slope )
 {
-  if(slope > -1.0 && slope <= 3.0) {
+  if(slope > -1.0 && slope <= 10.0) {
     env->slope = slope;
   }
 }

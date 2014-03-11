@@ -23,7 +23,7 @@ struct env_t {
   enum env_state_t state;
   float peak; /* peak value multiple */
   float hold; /* hold time (ms) */
-  float held;
+  float run; /* ticks run */
   float decay; /* decay time (ms) */
   float target; /* target value multiple */
   float cur; /* current value */
