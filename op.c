@@ -1,10 +1,12 @@
 #include <stdlib.h>
 #include <math.h>
 #include "op.h"
+#include "wt.h"
 
 void 
-op_init ( struct op_t *op, float frequency, float phase, float amp )
+op_init ( struct op_t *op, float frequency, float phase, float amp, struct wavetable_t *wt )
 {
+  op_set_wavetable(op, wt);
   op_set_frequency(op, frequency);
   op_set_amp(op, amp);
   op_set_phase(op, phase);
@@ -45,13 +47,13 @@ op_cur_amp ( struct op_t *op )
 float
 op_wave ( struct op_t *op )
 {
-  return sinf(2.0 * 3.14159 * op->current.phase);
+  return wt_lookup(op->wavetable, op->current.phase);
 }
 
 float
 op_wave_with_offset ( struct op_t *op, float offset )
 {
-  return sinf(2.0 * 3.14159 * (op->current.phase + offset));
+  return wt_lookup_offset(op->wavetable, op->current.phase, offset);
 }
 
 void 
@@ -74,4 +76,10 @@ op_set_amp ( struct op_t *op, float amp )
   if(amp <= 1.0 && amp >= 0) {
     op->base.amp = amp;
   }
+}
+
+void
+op_set_wavetable ( struct op_t *op, struct wavetable_t *wt )
+{
+  op->wavetable = wt;
 }

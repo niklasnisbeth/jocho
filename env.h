@@ -4,19 +4,18 @@
 #include "defs.h"
 
 enum env_settable_param_t {
-  PEAK_VAL,
-  HOLD_TIME,
-  DECAY_TIME,
-  TARGET_VAL,
-  SLOPE_COEF,
+  ENV_PEAK_VAL,
+  ENV_HOLD_TIME,
+  ENV_DECAY_TIME,
+  ENV_TARGET_VAL,
+  ENV_SLOPE_COEF,
   ENV_NUM_SETTABLE_PARAMS
 };
 
 enum env_state_t {
   ENV_STOPPED,
   ENV_HOLD,
-  ENV_DECAY,
-  ENV_SUSTAIN
+  ENV_DECAY
 };
 
 struct env_t {

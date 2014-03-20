@@ -1,13 +1,15 @@
-#include "env.h"
-#include "defs.h"
-
 #ifndef OP_H
 #define OP_H
 
+#include "env.h"
+#include "wt.h"
+#include "defs.h"
+
 enum op_settable_param_t {
-  FREQUENCY,
-  PHASE,
-  AMP
+  OP_FREQUENCY,
+  OP_PHASE,
+  OP_AMP,
+  OP_NUM_SETTABLE_PARAMS
 };
 
 
@@ -18,6 +20,7 @@ struct op_settings_t {
 };
 
 struct op_t {
+  struct wavetable_t *wavetable;
   struct op_settings_t base;
   struct op_settings_t current;
   struct env_t aenv;
@@ -28,8 +31,9 @@ struct op_t {
 void op_set_frequency ( struct op_t *op, float frequency );
 void op_set_phase ( struct op_t *op, float phase );
 void op_set_amp ( struct op_t *op, float amp ); 
+void op_set_wavetable ( struct op_t *op, struct wavetable_t *wt ); 
 
-void op_init ( struct op_t *op, float frequency, float phase, float amp );
+void op_init ( struct op_t *op, float frequency, float phase, float amp, struct wavetable_t *wt );
 void op_trigger ( struct op_t *op );
 float op_update_phase ( struct op_t *op );
 float op_cur_amp ( struct op_t *op );

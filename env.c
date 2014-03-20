@@ -1,5 +1,5 @@
-#include "stdlib.h"
 #include "env.h"
+#include "stdlib.h"
 #include "math.h"
 
 void
@@ -41,25 +41,23 @@ env_update ( struct env_t *env )
       if (env->run >= env->hold) {
         env->state = ENV_DECAY;
         env->run = 0;
+        break;
       }
       else {
         env->run += 1 / (SAMPLERATE / 1000);
+        break;
       }
-      break;
 
     case ENV_DECAY:
-      env->run += 1/(SAMPLERATE/1000);
-      env->cur = nonlinearize(env->run/env->decay, env->peak, env->target, env->slope);
+      env->run += 1/( SAMPLERATE/1000 );
       if ((env->run/env->decay)>=1.f) {
         env->state = ENV_STOPPED;
+        break;
       }
-      if ((env->peak > env->target && env->cur < env->target) || (env->peak < env->target && env->cur > env->target)) {
-        env->state = ENV_SUSTAIN;
+      else {
+        env->cur = nonlinearize(env->run/env->decay, env->peak, env->target, env->slope);
+        break;
       }
-      break;
-
-    case ENV_SUSTAIN:
-      break;
 
     case ENV_STOPPED:
       return 0;
