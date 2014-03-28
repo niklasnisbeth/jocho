@@ -11,6 +11,7 @@ voice_init ( struct voice_t *voice, struct wavetable_t *wt )
     op_init(&voice->ops[i], 110, 0.05f, 0.0f, wt);
     env_init(&voice->ops[i].aenv, 1.0, 20, 1500, 0.0, 0.9f);
     env_init(&voice->ops[i].penv, 1.0, 1, 1, 1.0, -0.9f);
+    env_init(&voice->ops[0].wenv, 0.0, 50, 400, 0.0f, 0.0f); 
   }
 
   op_init(&voice->ops[0], 2200, 0.0f, 0.0f, wt);

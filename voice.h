@@ -7,7 +7,7 @@
 
 #include "env.h"
 #include "op.h"
-#include "wt.h"
+#include "wavetable.h"
 
 #define NUM_OPS 4
 

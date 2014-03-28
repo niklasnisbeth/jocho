@@ -2,7 +2,7 @@
 #define OP_H
 
 #include "env.h"
-#include "wt.h"
+#include "wavetable.h"
 #include "defs.h"
 
 enum op_settable_param_t {
@@ -20,11 +20,12 @@ struct op_settings_t {
 };
 
 struct op_t {
-  struct wavetable_t *wavetable;
+  struct wavetable_t *wt;
   struct op_settings_t base;
   struct op_settings_t current;
   struct env_t aenv;
   struct env_t penv;
+  struct env_t wenv;
   int running;
 };
 

@@ -4,12 +4,14 @@
 #include "voice.h"
 #include "op.h"
 #include "env.h"
-#include "wt.h"
+#include "wave.h"
 #include "defs.h"
 
 typedef int16_t buffer_t[256];
 
 #define SINE_SIZE 1024
+#define SAW_SIZE 3
+#define TRI_SIZE 4
 
 void
 assert(int res)
@@ -50,17 +52,36 @@ main( void )
   buffer_t *buffer = malloc(sizeof(buffer_t));
   FILE *fd = fopen("tst.raw", "w"); 
 
-  float *sinevals = malloc(sizeof(float)*SINE_SIZE);
 
   struct voice_t voice;
 
-  wt_generate_sine(sinevals, SINE_SIZE);
-
-  struct wavetable_t sinetable;
+  float *sinevals = malloc(sizeof(float)*(SINE_SIZE+1));
+  wave_generate_sine(sinevals, SINE_SIZE); 
+  struct wave_t sinetable;
   sinetable.vals = sinevals;
   sinetable.size = SINE_SIZE;
 
-  voice_init(&voice, &sinetable);
+  float *sawvals = malloc(sizeof(float)*(SAW_SIZE+1));
+  wave_generate_saw(sawvals, SAW_SIZE);
+  struct wave_t sawtable;
+  sawtable.vals = sawvals;
+  sawtable.size = SAW_SIZE;
+
+  /*
+  float *trivals = malloc(sizeof(float)*(TRI_SIZE+1));
+  wave_generate_triangle(trivals, TRI_SIZE);
+  struct wave_t tritable;
+  tritable.vals = trivals;
+  tritable.size = TRI_SIZE;
+  */
+
+  struct wavetable_t wt;
+  struct wave_t *waves[] = malloc(sizeof(struct wave_t *)*2);
+  waves[0] = &sinetable;
+  waves[1] = &sinetable;
+  wavetable_init(&wt, &waves, 2);
+
+  voice_init(&voice, &wt);
   voice_trigger(&voice);
 
   while(1)
