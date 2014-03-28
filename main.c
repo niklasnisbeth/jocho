@@ -76,10 +76,10 @@ main( void )
   */
 
   struct wavetable_t wt;
-  struct wave_t *waves = malloc(sizeof(struct wave_t *)*2);
+  struct wave_t *waves = malloc(sizeof(struct wave_t)*2);
   waves[0] = sinetable;
   waves[1] = sinetable;
-  wavetable_init(&wt, &waves, 2);
+  wavetable_init(&wt, waves, 2);
 
   voice_init(&voice, &wt);
   voice_trigger(&voice);
